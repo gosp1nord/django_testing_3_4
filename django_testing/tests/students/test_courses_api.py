@@ -1,6 +1,5 @@
 import pytest
 from rest_framework.reverse import reverse
-# from django.urls import reverse
 from rest_framework.test import APIClient
 from students.models import Student, Course
 from model_bakery import baker
@@ -30,12 +29,12 @@ def courses_factory():
 @pytest.mark.django_db
 def test_get_one_course(client, courses_factory):
     courses_one = courses_factory(_quantity=10)
-    url = reverse('courses-list')
+    url = reverse(f'courses-detail', args=[courses_one[0].id])
     response = client.get(url)
     data = response.json()
     assert response.status_code == 200
-    assert courses_one[0].id == data[0]['id']
-    assert courses_one[0].name == data[0]['name']
+    assert courses_one[0].id == data['id']
+    assert courses_one[0].name == data['name']
 
 
 @pytest.mark.django_db
